@@ -4,7 +4,8 @@ Once a day, Zolaka publishes one Merkle root here. The root covers the head of e
 
 ## Files
 
-- `anchors/YYYY-MM-DD.json`: one file per day (UTC), holding the Merkle root and the number of leaves.
+- `anchors/YYYY-MM-DD.json`: one file per day (UTC). It holds the Merkle root, the number of leaves and the time the day closed. A second file on the same day would be named `YYYY-MM-DD.2.json`.
+- `anchors/YYYY-MM-DD.json.ots`: the file's [OpenTimestamps](https://opentimestamps.org) proof. It is added once Bitcoin has confirmed it, usually a few hours after the file.
 
 ## How a root is built
 
@@ -14,7 +15,14 @@ Once a day, Zolaka publishes one Merkle root here. The root covers the head of e
   - An interior node hashes as `SHA-256(0x01 || left || right)`.
   - The tree has RFC 6962's `MTH` shape, with leaves sorted by leaf hash.
 - **What's public:** only the root and the leaf count. Nothing here identifies a workspace or reveals its contents.
-- **Bitcoin timestamp:** each root is also timestamped in Bitcoin through [OpenTimestamps](https://opentimestamps.org).
+
+## How to check
+
+- **A workspace's proof:**
+  1. In the workspace's export, take its `anchor.published` event: the head, the leaf index, the tree size and the audit path.
+  2. Compute the leaf from the head, and follow the audit path to a root, as RFC 9162 §2.1.3.2 describes.
+  3. The result must equal `root` in the file named by the event's `path`. The event's `file_sha256` must be that file's SHA-256.
+- **The date:** run `ots verify anchors/YYYY-MM-DD.json.ots` with the reference client, or drop both files on opentimestamps.org. Either shows the Bitcoin block whose Merkle root commits to the file.
 
 ## Rules
 
