@@ -1,0 +1,9 @@
+{
+  "format": 1,
+  "label": "2026-11-11",
+  "closed_ts": "2026-11-11T00:40:00.297Z",
+  "tree": "RFC 6962, SHA-256",
+  "leaf": "RFC 8785 canonical JSON of {head_hash, head_seq, tenant}, one per workspace, sorted by leaf hash",
+  "size": 1,
+  "root": "70f0165378e278bf0b08473a687dafcb01079cd9a7edd876820cf939e8ca8c42"
+}
